@@ -9,10 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddSession();
 builder.Services.AddDbContext<AuthDbContext>(options =>
+
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("AuthConnectionString"));
 });
+
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>();
 var app = builder.Build();
 
@@ -25,6 +29,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();

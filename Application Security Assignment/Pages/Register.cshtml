@@ -1,0 +1,133 @@
+﻿@page
+@model Application_Security_Assignment.Pages.RegisterModel
+@{
+}
+<style>
+    .divider:after,
+    .divider:before {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #eee;
+    }
+</style>
+
+
+
+<section class="vh-100">
+    <h1>Register Form</h1>
+    <div class="container py-5 h-100">
+        <div class="row d-flex align-items-center justify-content-center h-100">
+       
+            <div class="col-md-7 col-lg-5 col-xl-5">
+                <form>
+                    <input type="file" accept="image/*" class="form-control" onchange="showImgPreview(this)" />
+                    <br />
+                    <img id="imgPreview" class="rounded-circle" style="height:300px;width:300px;object-fit:cover" src="/uploads/user.png" />
+                    <!-- username input -->
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form1Example13">Full Name</label>
+                        <input type="text" class="form-control form-control-lg" asp-for="RegisterUiState.FullName"/>
+                       <span asp-validation-for="RegisterUiState.FullName"></span>
+                        
+                    </div>
+
+                    <!-- Credit Card input -->
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form1Example13" asp-for="RegisterUiState.CreditCardNo">Credit Card Number</label>
+                        <input type="text" class="form-control form-control-lg" asp-for="RegisterUiState.CreditCardNo" />
+                        <span asp-validation-for="RegisterUiState.CreditCardNo"></span>
+                    </div>
+
+                    <!-- Gender input -->
+
+                    <div class="form-outline mb-4">
+                        <select class="form-control" asp-for="RegisterUiState.Gender">
+                            <label class="form-label" for="form1Example13">Gender</label>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+
+                        <span asp-validation-for="RegisterUiState.Gender"></span>
+                   
+                    </div>
+
+                    <!-- Mobile Number input -->
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form1Example13">Mobile Number</label>
+                        <input type="text" class="form-control form-control-lg" asp-for="RegisterUiState.MobileNo" />
+                        <span asp-validation-for="RegisterUiState.MobileNo"></span>
+                   
+                    </div>
+
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form1Example13">Email address</label>
+                        <input type="email" id="form1Example13" asp-for="RegisterUiState.Email" class="form-control form-control-lg" />
+                        <span asp-validation-for="RegisterUiState.Email"></span>
+                    </div>
+
+
+
+                    <!-- Delivery Address input -->
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form1Example13">Delivery Address</label>
+                        <input type="text" class="form-control form-control-lg" />
+                  
+                    </div>
+
+                    <!-- About Me -->
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form1Example13">About Me</label>
+                        <textarea class="form-control" rows="3"></textarea>
+        
+                    </div>
+
+                    <!-- Password input -->
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form1Example23">Password</label>
+                        <input type="password" class="form-control form-control-lg" />
+      
+                    </div>
+
+                    <!-- Confirm Password input -->
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form1Example23">Confirm Password</label>
+                        <input type="password" class="form-control form-control-lg" />
+                    
+                    </div>
+
+                    <div class="d-flex justify-content-around align-items-center mb-4">
+                        <!-- Checkbox -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" checked />
+                            <label class="form-check-label" for="form1Example3"> Remember me </label>
+                        </div>
+                        <a href="#!">Forgot password?</a>
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>
+
+
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+    function showImgPreview(input) {
+        if (input.files[0]) {
+            var uploadimg = new FileReader(); uploadimg.onload = function (displayimg) {
+                $("#imgPreview").attr('src', displayimg.target.result);
+            }
+            uploadimg.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
