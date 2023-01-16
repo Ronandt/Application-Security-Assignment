@@ -1,5 +1,7 @@
 using Application_Security_Assignment.Data.Database.WebApp_Core_Identity.Model;
 using Application_Security_Assignment.Data.Models;
+using Application_Security_Assignment.Identity;
+using Application_Security_Assignment.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,9 +17,18 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("AuthConnectionString"));
 });
+builder.Services.Configure<IdentityOptions>(options => { options.User.RequireUniqueEmail = true;
+}
 
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>();
+);
+builder.Services.AddScoped<IImageService, ImageService>();
+
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    
+}).AddEntityFrameworkStores<AuthDbContext>().AddErrorDescriber<ApplicationErrorDescriber>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

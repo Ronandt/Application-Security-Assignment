@@ -29,7 +29,7 @@ namespace Application_Security_Assignment.UiState
         [Required]
         public string? DeliveryAddress { get; set; }
 
-
+        
         public IFormFile? Image { get; set; }
 
 

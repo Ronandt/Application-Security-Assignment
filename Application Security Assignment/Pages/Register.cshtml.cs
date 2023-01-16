@@ -1,4 +1,5 @@
 using Application_Security_Assignment.Data.Models;
+using Application_Security_Assignment.Services;
 using Application_Security_Assignment.UiState;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +17,12 @@ namespace Application_Security_Assignment.Pages
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        private readonly IImageService _imageService;
+        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IImageService imageService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _imageService = imageService;
         }
 
         public void OnGet()
@@ -45,13 +48,14 @@ namespace Application_Security_Assignment.Pages
                     Gender = RegisterUiState.gender,
                     MobileNo = RegisterUiState.MobileNo,
                     DeliveryAddress = RegisterUiState.DeliveryAddress,
-                    //imageurl later
-                    UserName = RegisterUiState.FullName,
+                    UserName = $"{RegisterUiState.FullName.Replace(" ", "")}-{Guid.NewGuid()}",
                     AboutMe = RegisterUiState.AboutMe,
                 };
+              
                 var result = await _userManager.CreateAsync(newUser, RegisterUiState.Password);
                 if(result.Succeeded)
                 {
+                    await _imageService.StoreImage(RegisterUiState?.Image, newUser);
                     return Redirect("/login");
                 } else
                 {

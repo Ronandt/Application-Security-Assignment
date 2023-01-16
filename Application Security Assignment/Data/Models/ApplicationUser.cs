@@ -14,7 +14,7 @@ namespace Application_Security_Assignment.Data.Models
 
         public Gender? Gender { get; set; }
 
-      
+
         public string? MobileNo { get; set; }
    
         public string? DeliveryAddress { get; set; }
