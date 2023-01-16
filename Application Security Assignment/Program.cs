@@ -17,7 +17,13 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("AuthConnectionString"));
 });
-builder.Services.Configure<IdentityOptions>(options => { options.User.RequireUniqueEmail = true;
+builder.Services.Configure<IdentityOptions>(options => { 
+    options.User.RequireUniqueEmail = true;
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 12;
 }
 
 

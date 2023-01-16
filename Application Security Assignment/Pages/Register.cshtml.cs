@@ -18,11 +18,13 @@ namespace Application_Security_Assignment.Pages
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IImageService _imageService;
+
         public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IImageService imageService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _imageService = imageService;
+         
         }
 
         public void OnGet()
@@ -34,7 +36,7 @@ namespace Application_Security_Assignment.Pages
         {
             if(ModelState.IsValid)
             {
-                if(!(new Regex("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\\s).{12}").IsMatch(RegisterUiState.Password)))
+                if(!(RegexConstants.PASSWORD.IsMatch(RegisterUiState.Password)))
                 {
                     ModelState.AddModelError("RegisterUiState.Password", "Your password needs to be strong!");
                     return Page();
