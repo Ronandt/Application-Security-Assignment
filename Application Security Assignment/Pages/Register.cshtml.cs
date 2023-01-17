@@ -18,12 +18,14 @@ namespace Application_Security_Assignment.Pages
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IImageService _imageService;
+        private readonly ICryptographyService _cryptographyService;
 
-        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IImageService imageService)
+        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IImageService imageService, ICryptographyService cryptographyService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _imageService = imageService;
+            _cryptographyService = cryptographyService;
          
         }
 
@@ -43,12 +45,13 @@ namespace Application_Security_Assignment.Pages
                     ModelState.AddModelError("RegisterUiState.Password", "Your password needs to be strong!");
                     return Page();
                 }*/
+            
 
                 var newUser = new ApplicationUser()
                 {
                     Email = RegisterUiState.Email,
                     FullName = RegisterUiState.FullName,
-                    CreditCardNo = RegisterUiState.CreditCardNo,
+                    CreditCardNo = _cryptographyService.EncryptData(RegisterUiState.CreditCardNo).Value,
                     Gender = RegisterUiState.gender,
                     MobileNo = RegisterUiState.MobileNo,
                     DeliveryAddress = RegisterUiState.DeliveryAddress,

@@ -1,5 +1,6 @@
 using Application_Security_Assignment.Data.Database.WebApp_Core_Identity.Model;
 using Application_Security_Assignment.Data.Models;
+using Application_Security_Assignment.Filters;
 using Application_Security_Assignment.Identity;
 using Application_Security_Assignment.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -11,7 +12,10 @@ using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages().AddMvcOptions(options =>
+{
+    options.Filters.Add(new SessionAsyncFilter());
+});
 builder.Services.AddSession();
 builder.Services.AddDbContext<AuthDbContext>(options =>
 
@@ -37,7 +41,7 @@ builder.Services.Configure<IdentityOptions>(options => {
 );
 builder.Services.AddScoped<IImageService, ImageService>();
 
-
+builder.Services.AddScoped<ICryptographyService>(provider => new CryptographyService("FreshFarmMarket", "UserData"));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     
