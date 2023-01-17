@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Application_Security_Assignment.Pages
 {
     [Authorize]
+ 
     public class LogoutModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -19,21 +20,19 @@ namespace Application_Security_Assignment.Pages
             _filterSessionService = filterSessionService;
             this.httpContextAccessor = httpContextAccessor;
         }
-        public void OnGet()
+        public async Task<IActionResult> OnGet()
         {
-        }
-
-        public async Task<IActionResult> OnPostLogoutAsync()
-        {
-            if(User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated)
             {
                 await _signInManager.SignOutAsync();
                 _filterSessionService.ClearSession(httpContextAccessor);
-                
+
 
             }
-            
+
             return Redirect("/login");
         }
+
+        
     }
 }

@@ -24,9 +24,9 @@
                     <ul class="navbar-nav flex-grow-1">
                         @if(signInManager.IsSignedIn(User)) {
                             <li class="nav-item">
-                              <form method="POST" action="/logout">
-                                <button class="nav-link text-dark" type="submit" asp-route-handler="Logout">Logout</button>
-                            </form>
+                            
+                                <a class="nav-link text-dark" type="submit" asp-page="/Logout">Logout</a>
+                       
                             </li>
                         
                         } else {
