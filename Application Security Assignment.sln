@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application Security Assignment", "Application Security Assignment\Application Security Assignment.csproj", "{A73CE444-0005-45E0-8F6E-918F8B3A4918}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application Security Assignment", "Application Security Assignment\Application Security Assignment.csproj", "{A73CE444-0005-45E0-8F6E-918F8B3A4918}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

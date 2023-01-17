@@ -14,9 +14,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages().AddMvcOptions(options =>
 {
-    options.Filters.Add(new SessionAsyncFilter());
+    options.Filters.Add(new SessionAsyncFilter(new FilterSessionService()));
 });
-builder.Services.AddSession();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(FilterSessionService.SESSION_TIMEOUT_IN_SECONDS);
+});
+
 builder.Services.AddDbContext<AuthDbContext>(options =>
 
 {
@@ -40,11 +45,13 @@ builder.Services.Configure<IdentityOptions>(options => {
 
 );
 builder.Services.AddScoped<IImageService, ImageService>();
-
-builder.Services.AddScoped<ICryptographyService>(provider => new CryptographyService("FreshFarmMarket", "UserData"));
+builder.Services.AddScoped<IFilterSessionService, FilterSessionService>();
+ builder.Services.AddScoped<ICryptographyService>(provider => new CryptographyService("FreshFarmMarket", "UserData"));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    
+    options.Lockout.AllowedForNewUsers = LockoutConstants.ALLOWED_FOR_NEW_USERS;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(LockoutConstants.LOCKOUT_TIMESPAN_IN_MINUTES);
+    options.Lockout.MaxFailedAccessAttempts = LockoutConstants.MAX_FAILED_ATTEMPTS;
 }).AddEntityFrameworkStores<AuthDbContext>().AddErrorDescriber<ApplicationErrorDescriber>();
 builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/login");
 builder.Services.AddDataProtection();
