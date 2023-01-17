@@ -11,5 +11,15 @@ namespace Application_Security_Assignment.Identity
             error.Description = "This email address has already been registered!";
             return error;
         }
+
+        public override IdentityError DuplicateUserName(string userName)
+        {
+           var error = base.DuplicateUserName(userName);
+            error.Description = "This email address has already been registered!";
+           return error;
+            
+        }
+
+
     }
 }

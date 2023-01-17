@@ -34,13 +34,15 @@ namespace Application_Security_Assignment.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
+
             if(ModelState.IsValid)
             {
-                if(!(RegexConstants.PASSWORD.IsMatch(RegisterUiState.Password)))
+                
+               /* if(!(RegexConstants.PASSWORD.IsMatch(RegisterUiState.Password)))
                 {
                     ModelState.AddModelError("RegisterUiState.Password", "Your password needs to be strong!");
                     return Page();
-                }
+                }*/
 
                 var newUser = new ApplicationUser()
                 {
@@ -50,10 +52,11 @@ namespace Application_Security_Assignment.Pages
                     Gender = RegisterUiState.gender,
                     MobileNo = RegisterUiState.MobileNo,
                     DeliveryAddress = RegisterUiState.DeliveryAddress,
-                    UserName = $"{RegisterUiState.FullName.Replace(" ", "")}-{Guid.NewGuid()}",
+                    UserName = RegisterUiState.Email,
                     AboutMe = RegisterUiState.AboutMe,
                 };
               
+
                 var result = await _userManager.CreateAsync(newUser, RegisterUiState.Password);
                 if(result.Succeeded)
                 {

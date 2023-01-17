@@ -25,7 +25,7 @@
        
             <div class="col-md-7 col-lg-5 col-xl-5">
                 <form method="POST" enctype="multipart/form-data">
-                    <div asp-validation-summary="All"></div>
+                    <div asp-validation-summary="All" class="text-danger"></div>
                     <input type="file" accept="image/*" class="form-control" onchange="showImgPreview(this)" asp-for="RegisterUiState.Image"/>
                     <br />
                     <img id="imgPreview" class="rounded-circle" style="height:300px;width:300px;object-fit:cover" src="/uploads/user.png" />
@@ -33,7 +33,7 @@
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form1Example13">Full Name</label>
                         <input type="text" class="form-control form-control-lg" asp-for="RegisterUiState.FullName"/>
-                       <span asp-validation-for="RegisterUiState.FullName"></span>
+                        <span asp-validation-for="RegisterUiState.FullName" class="text-danger"></span>
                         
                     </div>
 
@@ -42,20 +42,20 @@
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form1Example13" asp-for="RegisterUiState.CreditCardNo">Credit Card Number</label>
                         <input type="text" class="form-control form-control-lg" asp-for="RegisterUiState.CreditCardNo" />
-                        <span asp-validation-for="RegisterUiState.CreditCardNo"></span>
+                        <span asp-validation-for="RegisterUiState.CreditCardNo" class="text-danger"></span>
                     </div>
 
                     <!-- Gender input -->
 
                     <div class="form-outline mb-4">
-                     
+                        <label class="form-label" for="form1Example13" asp-for="RegisterUiState.CreditCardNo">Credit Card Number</label>
                         <select class="form-control" asp-for="RegisterUiState.Gender">
                             <label class="form-label" for="form1Example13">Gender</label>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
 
-                        <span asp-validation-for="RegisterUiState.Gender"></span>
+                        <span asp-validation-for="RegisterUiState.Gender" class="text-danger"></span>
                    
                     </div>
 
@@ -64,7 +64,7 @@
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form1Example13">Mobile Number</label>
                         <input type="text" class="form-control form-control-lg" asp-for="RegisterUiState.MobileNo" />
-                        <span asp-validation-for="RegisterUiState.MobileNo"></span>
+                        <span asp-validation-for="RegisterUiState.MobileNo" class="text-danger"></span>
                    
                     </div>
 
@@ -72,7 +72,7 @@
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form1Example13">Email address</label>
                         <input type="email" id="form1Example13" asp-for="RegisterUiState.Email" class="form-control form-control-lg" />
-                        <span asp-validation-for="RegisterUiState.Email"></span>
+                        <span asp-validation-for="RegisterUiState.Email" class="text-danger"></span>
                     </div>
 
 
@@ -82,7 +82,7 @@
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form1Example13">Delivery Address</label>
                         <input type="text" class="form-control form-control-lg" asp-for="RegisterUiState.DeliveryAddress" />
-                     <span asp-validation-for="RegisterUiState.DeliveryAddress"></span>
+                        <span asp-validation-for="RegisterUiState.DeliveryAddress" class="text-danger"></span>
                     </div>
 
                     <!-- About Me -->
@@ -96,7 +96,7 @@
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form1Example23">Password</label>
                         <input type="password" class="form-control form-control-lg" asp-for="RegisterUiState.Password" />
-                          <span asp-validation-for ="RegisterUiState.Password"></span>
+                          <span asp-validation-for ="RegisterUiState.Password" class="text-danger"></span>
       
                     </div>
 
@@ -104,7 +104,7 @@
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form1Example23">Confirm Password</label>
                         <input type="password" class="form-control form-control-lg" asp-for="RegisterUiState.ConfirmPassword" />
-                        <span asp-validation-for ="RegisterUiState.ConfirmPassword"></span>
+                        <span asp-validation-for="RegisterUiState.ConfirmPassword" class="text-danger"></span>
                     </div>
 
                     <div class="d-flex justify-content-around align-items-center mb-4">
@@ -128,6 +128,11 @@
     </div>
 </section>
 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
 <script>
     function showImgPreview(input) {
         if (input.files[0]) {
