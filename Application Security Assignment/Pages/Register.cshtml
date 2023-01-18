@@ -17,14 +17,24 @@
 </style>
 
 
-
+@section RecaptchaScript
+{
+    <script src="https://www.google.com/recaptcha/api.js?render=6LeHUwckAAAAAA0wOUeJAjtDczI5kGeF-C_usJxy"></script>
+    <script>
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6LeHUwckAAAAAA0wOUeJAjtDczI5kGeF-C_usJxy', { action: 'submit' }).then(function (token) {
+                document.getElementById("token").value = token;
+            });
+        });
+    </script>
+}
 <section class="vh-100">
     <h1>Register Form</h1>
     <div class="container py-5 h-100">
         <div class="row d-flex align-items-center justify-content-center h-100">
        
             <div class="col-md-7 col-lg-5 col-xl-5">
-                <form method="POST" enctype="multipart/form-data">
+                <form method="POST" enctype="multipart/form-data" asp-antiforgery="true">
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <input type="file" accept="image/*" class="form-control" onchange="showImgPreview(this)" asp-for="RegisterUiState.Image"/>
                     <br />
@@ -36,7 +46,7 @@
                         <span asp-validation-for="RegisterUiState.FullName" class="text-danger"></span>
                         
                     </div>
-
+                        <input type="hidden" id="token" name="token" />
                     <!-- Credit Card input -->
 
                     <div class="form-outline mb-4">

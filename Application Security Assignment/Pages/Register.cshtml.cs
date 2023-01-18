@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace Application_Security_Assignment.Pages
 {
+    [ValidateAntiForgeryToken]
     public class RegisterModel : PageModel
     {
         [BindProperty]
@@ -19,14 +20,15 @@ namespace Application_Security_Assignment.Pages
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IImageService _imageService;
         private readonly ICryptographyService _cryptographyService;
+        private readonly ICaptchaService _captchaService;
 
-        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IImageService imageService, ICryptographyService cryptographyService)
+        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IImageService imageService, ICryptographyService cryptographyService, ICaptchaService captchaService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _imageService = imageService;
             _cryptographyService = cryptographyService;
-         
+            _captchaService = captchaService;
         }
 
         public void OnGet()
@@ -45,6 +47,13 @@ namespace Application_Security_Assignment.Pages
                     ModelState.AddModelError("RegisterUiState.Password", "Your password needs to be strong!");
                     return Page();
                 }*/
+
+                if(!(await _captchaService.CaptchaPassed(Request.Form["token"])).Value)
+                {
+                    ModelState.AddModelError("", "You have failed the CAPTCHA. Try again.");
+                    return Page();
+
+                }
             
 
                 var newUser = new ApplicationUser()

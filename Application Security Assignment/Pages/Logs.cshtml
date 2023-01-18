@@ -1,0 +1,40 @@
+﻿@page
+@model Application_Security_Assignment.Pages.LogsModel
+@{
+}
+<table id="example" class="display" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Action</th>
+            <th>Description</th>
+            <th>User</th>
+            <th>Timestamp</th>
+      
+        </tr>
+    </thead>
+
+
+
+    <tbody>
+        @foreach(var log in Model.LogsUiState.Logs) {
+            <tr>
+                <td>@log.Id</td>
+                <td>@log.Action</td>
+                <td>@log.Description</td>
+                
+                <td>@log.LoggedEmailUser</td>
+                <td>@log.Timestamp</td>
+          
+            </tr>
+        }
+      
+      
+    </tbody>
+</table>
+
+         <script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+         </script>

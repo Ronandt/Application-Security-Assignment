@@ -5,7 +5,7 @@
 }
 <h1>Login Page</h1>
 
-<form method="POST">
+<form method="POST" asp-antiforgery="true">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-outline mb-4">
         <label class="form-label" for="form1Example13">Email address</label>

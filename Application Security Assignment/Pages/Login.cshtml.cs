@@ -10,28 +10,33 @@ namespace Application_Security_Assignment.Pages
 {
 
 
-   
+    [ValidateAntiForgeryToken]
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IFilterSessionService _filterSessionService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogService _logService;
      
-        public LoginModel(SignInManager<ApplicationUser> signInManager, IFilterSessionService filterSessionService, IHttpContextAccessor httpContextAccessor)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, IFilterSessionService filterSessionService, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, ILogService logService)
         {
             _signInManager = signInManager;
             _filterSessionService = filterSessionService;
             _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
+            _logService = logService;
         }
 
         [BindProperty]
  
         public LoginUiState LoginUiState { get; set; }
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
             if (!_filterSessionService.CheckUserSession(_httpContextAccessor).Value && HttpContext.User.Identity.IsAuthenticated)
             {
-                _signInManager.SignOutAsync();
+                await _logService.LogUser(Data.Enums.Actions.Logout, (await _userManager.GetUserAsync(User)).Email);
+                await _signInManager.SignOutAsync();
                 return Redirect("/login");
             }
             return Page();
@@ -46,8 +51,9 @@ namespace Application_Security_Assignment.Pages
 
                 if (identityResult.Succeeded)
                 {
-
+              
                     _filterSessionService.StoreUserSession(LoginUiState.Email, _httpContextAccessor);
+                    await _logService.LogUser(Data.Enums.Actions.Login, LoginUiState.Email);
                     return RedirectToPage("/Index");
                 }
                 if(identityResult.IsLockedOut)

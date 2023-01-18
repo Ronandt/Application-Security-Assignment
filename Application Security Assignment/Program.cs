@@ -45,8 +45,10 @@ builder.Services.Configure<IdentityOptions>(options => {
 
 );
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IFilterSessionService, FilterSessionService>();
  builder.Services.AddScoped<ICryptographyService>(provider => new CryptographyService("FreshFarmMarket", "UserData"));
+builder.Services.AddScoped<ICaptchaService, CaptchaService>();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Lockout.AllowedForNewUsers = LockoutConstants.ALLOWED_FOR_NEW_USERS;
@@ -70,6 +72,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseStatusCodePagesWithRedirects("/errors/{0}");
 
 app.UseSession();
 app.UseRouting();
