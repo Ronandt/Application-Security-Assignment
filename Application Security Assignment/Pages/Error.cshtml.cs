@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Application_Security_Assignment.Pages
 {
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    [IgnoreAntiforgeryToken]
+    //[IgnoreAntiforgeryToken] - Static code analysis
     public class ErrorModel : PageModel
     {
         public string? RequestId { get; set; }
