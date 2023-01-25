@@ -1,0 +1,22 @@
+﻿@page
+@model Application_Security_Assignment.Pages.ResetVerifiedModel
+@{
+}
+<form method="POST" asp-antiforgery="true">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+
+    <div class="form-outline mb-4">
+        <label class="form-label" for="form1Example13">Password</label>
+        <input type="password" id="form1Example13" asp-for="Password" class="form-control form-control-lg" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

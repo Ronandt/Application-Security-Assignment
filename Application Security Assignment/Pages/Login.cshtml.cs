@@ -65,5 +65,10 @@ namespace Application_Security_Assignment.Pages
             }
             return Page();
         }
+
+        public async Task<IActionResult> OnPostGoogleAsync()
+        {
+            return Page();
+        }
     }
     }

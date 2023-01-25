@@ -5,8 +5,10 @@ using Application_Security_Assignment.Identity;
 using Application_Security_Assignment.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +18,7 @@ builder.Services.AddRazorPages().AddMvcOptions(options =>
 {
     options.Filters.Add(new SessionAsyncFilter(new FilterSessionService()));
 });
+
 
 builder.Services.AddSession(options =>
 {
@@ -44,6 +47,12 @@ builder.Services.Configure<IdentityOptions>(options => {
 
 
 );
+
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+});
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IFilterSessionService, FilterSessionService>();
@@ -54,9 +63,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Lockout.AllowedForNewUsers = LockoutConstants.ALLOWED_FOR_NEW_USERS;
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(LockoutConstants.LOCKOUT_TIMESPAN_IN_MINUTES);
     options.Lockout.MaxFailedAccessAttempts = LockoutConstants.MAX_FAILED_ATTEMPTS;
-}).AddEntityFrameworkStores<AuthDbContext>().AddErrorDescriber<ApplicationErrorDescriber>();
+}).AddEntityFrameworkStores<AuthDbContext>().AddErrorDescriber<ApplicationErrorDescriber>().AddDefaultTokenProviders(); ;
 builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/login");
 builder.Services.AddDataProtection();
+builder.Services.AddTransient<IEmailSenderService, EmailSenderService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

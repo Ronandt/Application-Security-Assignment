@@ -10,12 +10,12 @@ namespace Application_Security_Assignment.Filters
     public class SessionAsyncFilter : IAsyncPageFilter
     {
        private readonly IFilterSessionService _filterSessionService;
-        private readonly List<string> allowedPaths = new List<string>()
+        private readonly List<string> disallowedPaths = new List<string>()
         {
-            "/login",
-            "/register",
-            "/error"
+            "/logs",
+            "/"
            
+
         };
     
         public SessionAsyncFilter(IFilterSessionService filterSessionService)
@@ -26,7 +26,7 @@ namespace Application_Security_Assignment.Filters
 
         public Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
         {
-            if (!_filterSessionService.CheckUserSession(context).Value && !allowedPaths.Any(x=> x.ToString() == context.HttpContext.Request.Path))
+            if (!_filterSessionService.CheckUserSession(context).Value && disallowedPaths.Any(x=> x.ToString() == context.HttpContext.Request.Path))
             {
               
               

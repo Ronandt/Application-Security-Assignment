@@ -3,8 +3,10 @@
 @model Application_Security_Assignment.Pages.LoginModel
 @{
 }
-<h1>Login Page</h1>
 
+
+<h1>Login Page</h1>
+<a href="/passwordreset">Forgot your password?</a>
 <form method="POST" asp-antiforgery="true">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-outline mb-4">
@@ -19,8 +21,11 @@
         <span asp-validation-for="LoginUiState.Password" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
+
 </form>
 
 
 
-
+<form method="POST">
+    <button asp-page-handler="Google" class="btn btn-primary"  type="submit">Login with google</button>
+</form>
