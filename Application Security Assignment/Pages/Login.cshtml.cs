@@ -29,21 +29,25 @@ namespace Application_Security_Assignment.Pages
         }
 
         [BindProperty]
- 
-        public LoginUiState LoginUiState { get; set; }
+
+        public LoginUiState LoginUiState { get; set; } = new LoginUiState();
         public async Task<IActionResult> OnGet()
         {
+            LoginUiState.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+      
             if (!_filterSessionService.CheckUserSession(_httpContextAccessor).Value && HttpContext.User.Identity.IsAuthenticated)
             {
                 await _logService.LogUser(Data.Enums.Actions.Logout, (await _userManager.GetUserAsync(User)).Email);
                 await _signInManager.SignOutAsync();
                 return Redirect("/login");
             }
+       
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            LoginUiState.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
 
@@ -68,7 +72,14 @@ namespace Application_Security_Assignment.Pages
 
         public async Task<IActionResult> OnPostGoogleAsync()
         {
-            return Page();
+       
+            return new ChallengeResult("Google", _signInManager.ConfigureExternalAuthenticationProperties("Google", "/ExternalLogin"));
+
         }
+ 
     }
+
     }
+
+
+

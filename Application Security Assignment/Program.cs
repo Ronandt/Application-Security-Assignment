@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Options;
+using Microsoft.Build.Framework;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,7 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("AuthConnectionString"));
 });
-
+builder.Services.AddControllers();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 // NOTE: Stores to server memory
 // TODO: Change to externals stores to allow horizontal scalling
@@ -52,12 +53,15 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
     googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
     googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+    googleOptions.CallbackPath = "/signin-google";
+    
 });
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IFilterSessionService, FilterSessionService>();
  builder.Services.AddScoped<ICryptographyService>(provider => new CryptographyService("FreshFarmMarket", "UserData"));
 builder.Services.AddScoped<ICaptchaService, CaptchaService>();
+builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Lockout.AllowedForNewUsers = LockoutConstants.ALLOWED_FOR_NEW_USERS;
@@ -67,7 +71,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/login");
 builder.Services.AddDataProtection();
 builder.Services.AddTransient<IEmailSenderService, EmailSenderService>();
-
+builder.Services.AddScoped<SecurityFilter>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -89,7 +93,7 @@ app.UseSession();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapControllers();
 app.MapRazorPages();
 
 app.Run();

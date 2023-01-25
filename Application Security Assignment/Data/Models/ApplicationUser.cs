@@ -22,5 +22,9 @@ namespace Application_Security_Assignment.Data.Models
         public string? ImageURL { get; set; }
 
         public string? AboutMe { get; set; }
+
+        public long? PasswordCreation { get; set; } = DateTimeOffset.Now.ToUnixTimeSeconds();
+
+        public string? PreviousPasswordHash { get; set; }
     }
 }

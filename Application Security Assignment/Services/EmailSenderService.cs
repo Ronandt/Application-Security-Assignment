@@ -34,7 +34,7 @@ namespace Application_Security_Assignment.Services
             newMail.Subject = subject; // use HTML for the email body
 
             newMail.IsBodyHtml = false;
-            newMail.Body = $"https://localhost:7042/resetverified?Token={HttpUtility.UrlEncode(message)}&Email={emailAddressReceiver}";
+            newMail.Body = message;
             client.UseDefaultCredentials = false;
             // enable SSL for encryption across channels
             client.EnableSsl = true;

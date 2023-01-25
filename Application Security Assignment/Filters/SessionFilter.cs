@@ -33,6 +33,7 @@ namespace Application_Security_Assignment.Filters
                 context.Result = new RedirectToPageResult("/login");
                 return Task.CompletedTask;
             }
+
             return next();
         }
 

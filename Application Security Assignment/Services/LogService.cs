@@ -42,7 +42,7 @@ namespace Application_Security_Assignment.Services
 
         public async Task<Result<List<Log>>> RetrieveLogs()
         {
-            return Result<List<Log>>.Success("Successfully retrieved", _authDbContext.Log.ToList());
+            return Result<List<Log>>.Success("Successfully retrieved", _authDbContext.Log.OrderBy(x => x.Timestamp).ToList());
         }
 
 

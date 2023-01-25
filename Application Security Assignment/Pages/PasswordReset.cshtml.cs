@@ -12,10 +12,13 @@ namespace Application_Security_Assignment.Pages
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSenderService _emailSender;
-        public PasswordResetModel(UserManager<ApplicationUser> userManager, IEmailSenderService emailSender)
+        private readonly IResetPasswordService _resetPasswordService;
+       
+        public PasswordResetModel(UserManager<ApplicationUser> userManager, IResetPasswordService resetPasswordService)
         {
             _userManager = userManager;
-            _emailSender = emailSender;
+      
+            _resetPasswordService = resetPasswordService;
         }
         [BindProperty]
         public PasswordResetUiState PasswordResetUiState { get; set; }
@@ -28,7 +31,8 @@ namespace Application_Security_Assignment.Pages
         {
             if (ModelState.IsValid)
             {
-                await _emailSender.SendEmailAsync(PasswordResetUiState.Email, "Password reset token",await _userManager.GeneratePasswordResetTokenAsync(await _userManager.FindByEmailAsync(PasswordResetUiState.Email)));
+                await _resetPasswordService.SendPasswordResetEmail(PasswordResetUiState.Email);
+                
 
                 TempData["success"] = "Email sent!";
          

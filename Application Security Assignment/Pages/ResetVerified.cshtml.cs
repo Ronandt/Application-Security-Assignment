@@ -1,4 +1,5 @@
 using Application_Security_Assignment.Data.Models;
+using Application_Security_Assignment.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -21,9 +22,11 @@ namespace Application_Security_Assignment.Pages
         [BindProperty(SupportsGet = true), Required]
         public string Token { get; set; }
         private readonly UserManager<ApplicationUser> _userManager;
-        public ResetVerifiedModel(UserManager<ApplicationUser> userManager)
+        private readonly IResetPasswordService _resetPasswordService;
+        public ResetVerifiedModel(UserManager<ApplicationUser> userManager, IResetPasswordService resetPasswordService)
         {
             _userManager = userManager;
+            _resetPasswordService = resetPasswordService;
         }
         public void OnGet()
         {
@@ -34,12 +37,13 @@ namespace Application_Security_Assignment.Pages
  
             if (ModelState.IsValid)
             {
-                if (!(await _userManager.ResetPasswordAsync(await _userManager.FindByEmailAsync(Email), Token, Password)).Succeeded)
+                var resetPasswordResult = await _resetPasswordService.ResetPassword(Email, Token, Password);
+                if (!(resetPasswordResult.Value))
                 {
-                    TempData["error"] = "Invalid token";
+                    TempData["error"] = resetPasswordResult.Message;
                     return Page();
                 }
-                TempData["success"] = "Password has been reset!";
+                TempData["success"] = resetPasswordResult.Message;
                 return Redirect("/login");
 
             }
