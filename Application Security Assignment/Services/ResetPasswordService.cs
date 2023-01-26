@@ -7,6 +7,7 @@ using System.Web;
 using NuGet.Common;
 using System.Web.Helpers;
 using Application_Security_Assignment.Data.Database.WebApp_Core_Identity.Model;
+using System.Linq;
 
 namespace Application_Security_Assignment.Services
 {
@@ -34,14 +35,10 @@ namespace Application_Security_Assignment.Services
         {
             ApplicationUser user = await _userManager.FindByEmailAsync(email);
             string oldPassword = user.PasswordHash;
-
-            if ((DateTimeOffset.Now.ToUnixTimeSeconds() - user.PasswordCreation) < MIN_PASSWORD_LENGTH_SECONDS)
+            var Presult = VerifyPasswordWithPasswordPolicy(user, password);
+            if (!Presult.Value)
             {
-                return Result<bool>.Success("You reset your password too soon!", false);
-            }
-            else if(_userManager.PasswordHasher.VerifyHashedPassword(user, oldPassword ,password) is PasswordVerificationResult.Success || _userManager.PasswordHasher.VerifyHashedPassword(user, user.PreviousPasswordHash ?? "", password) is PasswordVerificationResult.Success)
-            {
-                return Result<bool>.Success("Use a brand new password!", false);
+                return Result<bool>.Success(Presult.Message, false);
             }
             else if(!(await _userManager.ResetPasswordAsync(user, token, password)).Succeeded)
             {
@@ -53,6 +50,46 @@ namespace Application_Security_Assignment.Services
             user.PreviousPasswordHash = oldPassword;
             await _userManager.UpdateAsync(user);
             return Result<bool>.Success("Password resetted!", true);
+        }
+
+        public async Task<Result<bool>> ResetPassword(ApplicationUser user, string currentPassword, string newPassword)
+        {
+            string oldPassword = user.PasswordHash;
+            var Presult = VerifyPasswordWithPasswordPolicy(user, newPassword);
+            if (Presult.Value)
+            {
+          
+                var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+                if (result.Succeeded)
+                {
+                    user.PasswordCreation = DateTimeOffset.Now.ToUnixTimeSeconds();
+                    user.PreviousPasswordHash = oldPassword;
+                    await _userManager.UpdateAsync(user);
+                    return Result<bool>.Success(Presult.Message, true);
+
+                } 
+                return Result<bool>.Success(String.Join(", ", result.Errors.Select( x => x.Description)), false);
+               
+            } 
+           return Result<bool>.Success(Presult.Message, false);
+
+
+
+
+
+        }
+
+        private Result<bool> VerifyPasswordWithPasswordPolicy(ApplicationUser user, string password)
+        {
+            if ((DateTimeOffset.Now.ToUnixTimeSeconds() - user.PasswordCreation) < MIN_PASSWORD_LENGTH_SECONDS)
+            {
+                return Result<bool>.Success("You reset your password too soon!", false);
+            }
+            else if (_userManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash, password) is PasswordVerificationResult.Success || _userManager.PasswordHasher.VerifyHashedPassword(user, user.PreviousPasswordHash ?? "", password) is PasswordVerificationResult.Success)
+            {
+                return Result<bool>.Success("Use a brand new password!", false);
+            }
+            return Result<bool>.Success("Success!", true);
         }
 
         

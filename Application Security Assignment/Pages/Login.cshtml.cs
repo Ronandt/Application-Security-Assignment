@@ -60,10 +60,14 @@ namespace Application_Security_Assignment.Pages
                     await _logService.LogUser(Data.Enums.Actions.Login, LoginUiState.Email);
                     return RedirectToPage("/Index");
                 }
-                if(identityResult.IsLockedOut)
+                else if(identityResult.IsLockedOut)
                 {
                     ModelState.AddModelError("", "You have been locked out");
                     return Page();
+                }
+                else if(identityResult.RequiresTwoFactor)
+                {
+                    return Redirect("/");
                 }
                 ModelState.AddModelError("", "Username or Password incorrect.");
             }
