@@ -62,13 +62,26 @@ builder.Services.AddScoped<IFilterSessionService, FilterSessionService>();
  builder.Services.AddScoped<ICryptographyService>(provider => new CryptographyService("FreshFarmMarket", "UserData"));
 builder.Services.AddScoped<ICaptchaService, CaptchaService>();
 builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
+
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Lockout.AllowedForNewUsers = LockoutConstants.ALLOWED_FOR_NEW_USERS;
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(LockoutConstants.LOCKOUT_TIMESPAN_IN_MINUTES);
     options.Lockout.MaxFailedAccessAttempts = LockoutConstants.MAX_FAILED_ATTEMPTS;
-}).AddEntityFrameworkStores<AuthDbContext>().AddErrorDescriber<ApplicationErrorDescriber>().AddDefaultTokenProviders(); ;
-builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/login");
+}).AddEntityFrameworkStores<AuthDbContext>().AddErrorDescriber<ApplicationErrorDescriber>().AddDefaultTokenProviders();
+
+builder.Services.Configure<SecurityStampValidatorOptions>(x =>
+{
+    x.ValidationInterval = TimeSpan.Zero;
+
+
+});
+builder.Services.ConfigureApplicationCookie(options => { options.LoginPath = "/login";
+
+
+});
+
 builder.Services.AddDataProtection();
 builder.Services.AddTransient<IEmailSenderService, EmailSenderService>();
 builder.Services.AddScoped<SecurityFilter>();
@@ -90,6 +103,7 @@ app.UseStaticFiles();
 app.UseStatusCodePagesWithRedirects("/errors/{0}");
 
 app.UseSession();
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

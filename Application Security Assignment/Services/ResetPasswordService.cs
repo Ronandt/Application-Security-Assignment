@@ -39,17 +39,22 @@ namespace Application_Security_Assignment.Services
             if (!Presult.Value)
             {
                 return Result<bool>.Success(Presult.Message, false);
-            }
-            else if(!(await _userManager.ResetPasswordAsync(user, token, password)).Succeeded)
+            } else
             {
-               
-                return Result<bool>.Success("Invalid token", false);
+                var result = await _userManager.ResetPasswordAsync(user, token, password);
+                if (!result.Succeeded)
+                {
+
+
+                    return Result<bool>.Success(String.Join(", ", result.Errors.Select(x => x.Description)), false);
+                }
+
+                user.PasswordCreation = DateTimeOffset.Now.ToUnixTimeSeconds();
+                user.PreviousPasswordHash = oldPassword;
+                await _userManager.UpdateAsync(user);
+                return Result<bool>.Success("Password resetted!", true);
             }
 
-            user.PasswordCreation = DateTimeOffset.Now.ToUnixTimeSeconds();
-            user.PreviousPasswordHash = oldPassword;
-            await _userManager.UpdateAsync(user);
-            return Result<bool>.Success("Password resetted!", true);
         }
 
         public async Task<Result<bool>> ResetPassword(ApplicationUser user, string currentPassword, string newPassword)

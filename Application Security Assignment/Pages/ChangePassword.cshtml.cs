@@ -16,9 +16,14 @@ namespace Application_Security_Assignment.Pages
         private readonly IResetPasswordService _resetPasswordService;
         private readonly UserManager<ApplicationUser> _userManager;
         [BindProperty]
+        [Required]
         public string CurrentPassword { get; set; }
 
         [BindProperty]
+        [DataType(DataType.Password)]
+        [RegularExpression(RegexConstants.PASSWORD_PATTERN, ErrorMessage = @"Passwords must be at least 12 characters, least one non alphanumeric character, least one lowercase ('a'-'z')
+and at least one uppercase ('A'-'Z')")]
+        [Required]
         public string NewPassword { get; set; }
         public ChangePasswordModel(IResetPasswordService resetPasswordService, UserManager<ApplicationUser> userManager)
         {

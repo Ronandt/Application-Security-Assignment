@@ -27,6 +27,10 @@ namespace Application_Security_Assignment.Pages
         public async Task<IActionResult> OnGet()
         {
             var info = await _signInManager.GetExternalLoginInfoAsync();
+            if(await _userManager.FindByNameAsync(info.Principal.FindFirstValue(ClaimTypes.Email)) != null)
+            {
+                await _userManager.UpdateSecurityStampAsync(await _userManager.FindByNameAsync(info.Principal.FindFirstValue(ClaimTypes.Email)));
+            }
             var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider,
                 info.ProviderKey, isPersistent: true, bypassTwoFactor: true);
             if(signInResult.Succeeded)

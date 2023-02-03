@@ -13,7 +13,10 @@ namespace Application_Security_Assignment.Pages
     public class ResetVerifiedModel : PageModel
     {
         [BindProperty]
-        
+        [DataType(DataType.Password)]
+        [RegularExpression(RegexConstants.PASSWORD_PATTERN, ErrorMessage = @"Passwords must be at least 12 characters, least one non alphanumeric character, least one lowercase ('a'-'z')
+and at least one uppercase ('A'-'Z')")]
+        [Required]
         public string Password { get; set; }
 
         [BindProperty(SupportsGet = true)]

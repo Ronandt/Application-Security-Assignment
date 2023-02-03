@@ -41,6 +41,10 @@ namespace Application_Security_Assignment.Pages
                 await _signInManager.SignOutAsync();
                 return Redirect("/login");
             }
+            if (!HttpContext.User.Identity.IsAuthenticated && _filterSessionService.CheckUserSession(_httpContextAccessor).Value)
+            {
+                _filterSessionService.ClearSession(_httpContextAccessor);
+            }
        
             return Page();
         }
@@ -50,7 +54,11 @@ namespace Application_Security_Assignment.Pages
             LoginUiState.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-
+                var user = await _userManager.FindByNameAsync(LoginUiState.Email);
+                if (user != null && await _userManager.CheckPasswordAsync(user, LoginUiState.Password))
+                {
+                    await _userManager.UpdateSecurityStampAsync(user);
+                }
                 var identityResult = await _signInManager.PasswordSignInAsync(LoginUiState.Email, LoginUiState.Password, true, true);
 
                 if (identityResult.Succeeded)
@@ -67,7 +75,8 @@ namespace Application_Security_Assignment.Pages
                 }
                 else if(identityResult.RequiresTwoFactor)
                 {
-                    return Redirect("/");
+                    
+                    return RedirectToAction("/twofactor", new {email = LoginUiState.Email});
                 }
                 ModelState.AddModelError("", "Username or Password incorrect.");
             }
