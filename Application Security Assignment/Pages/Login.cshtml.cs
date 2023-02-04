@@ -59,6 +59,7 @@ namespace Application_Security_Assignment.Pages
                 {
                     await _userManager.UpdateSecurityStampAsync(user);
                 }
+
                 var identityResult = await _signInManager.PasswordSignInAsync(LoginUiState.Email, LoginUiState.Password, true, true);
 
                 if (identityResult.Succeeded)
@@ -76,10 +77,11 @@ namespace Application_Security_Assignment.Pages
                 else if(identityResult.RequiresTwoFactor)
                 {
                     
-                    return RedirectToAction("/twofactor", new {email = LoginUiState.Email});
+                    return Redirect($"/twofactor?email={LoginUiState.Email}");
                 }
-                ModelState.AddModelError("", "Username or Password incorrect.");
+            
             }
+            TempData["error"] = "Incorrect credentials!";
             return Page();
         }
 

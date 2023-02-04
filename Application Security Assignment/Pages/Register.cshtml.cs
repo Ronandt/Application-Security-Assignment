@@ -66,7 +66,8 @@ namespace Application_Security_Assignment.Pages
                     DeliveryAddress = RegisterUiState.DeliveryAddress,
                     UserName = RegisterUiState.Email,
                     AboutMe = RegisterUiState.AboutMe,
-                    TwoFactorEnabled = true
+                    TwoFactorEnabled = true,
+                    EmailConfirmed = true
                 };
               
 
