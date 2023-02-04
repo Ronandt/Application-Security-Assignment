@@ -18,14 +18,16 @@ namespace Application_Security_Assignment.Pages
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogService _logService;
+        private readonly AuthenticationService _authenticationService;
      
-        public LoginModel(SignInManager<ApplicationUser> signInManager, IFilterSessionService filterSessionService, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, ILogService logService)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, IFilterSessionService filterSessionService, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, ILogService logService, AuthenticationService authentication)
         {
             _signInManager = signInManager;
             _filterSessionService = filterSessionService;
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
             _logService = logService;
+            _authenticationService = authentication;
         }
 
         [BindProperty]
@@ -54,19 +56,16 @@ namespace Application_Security_Assignment.Pages
             LoginUiState.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+             
                 var user = await _userManager.FindByNameAsync(LoginUiState.Email);
-                if (user != null && await _userManager.CheckPasswordAsync(user, LoginUiState.Password))
-                {
-                    await _userManager.UpdateSecurityStampAsync(user);
-                }
+           
 
-                var identityResult = await _signInManager.PasswordSignInAsync(LoginUiState.Email, LoginUiState.Password, true, true);
+
+                var identityResult = (await _authenticationService.LocalLogin(user, LoginUiState.Password)).Value;
 
                 if (identityResult.Succeeded)
                 {
               
-                    _filterSessionService.StoreUserSession(LoginUiState.Email, _httpContextAccessor);
-                    await _logService.LogUser(Data.Enums.Actions.Login, LoginUiState.Email);
                     return RedirectToPage("/Index");
                 }
                 else if(identityResult.IsLockedOut)

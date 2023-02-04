@@ -9,7 +9,7 @@ namespace Application_Security_Assignment.UiState
         public Gender gender;
         [Required]
         [Display(Name ="Full Name")]
-   
+        [RegularExpression(RegexConstants.DISALLOW_SPECIAL_CHARACTERS_PATTERN, ErrorMessage = @"Special characters not allowed")]
         public string? FullName { get; set; }
 
         [Display(Name = "Credit Card Number")]
@@ -26,8 +26,10 @@ namespace Application_Security_Assignment.UiState
         }
         [Required]
         [DataType(DataType.PhoneNumber)]
+        [RegularExpression(RegexConstants.DISALLOW_SPECIAL_CHARACTERS_PATTERN, ErrorMessage = @"Special characters not allowed")]
         public string? MobileNo { get; set; }
         [Required]
+        [RegularExpression(RegexConstants.DISALLOW_SPECIAL_CHARACTERS_PATTERN, ErrorMessage = @"Special characters not allowed")]
         public string? DeliveryAddress { get; set; }
 
         

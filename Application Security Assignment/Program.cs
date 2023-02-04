@@ -62,6 +62,7 @@ builder.Services.AddScoped<IFilterSessionService, FilterSessionService>();
  builder.Services.AddScoped<ICryptographyService>(provider => new CryptographyService("FreshFarmMarket", "UserData"));
 builder.Services.AddScoped<ICaptchaService, CaptchaService>();
 builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
+builder.Services.AddScoped<AuthenticationService>();
 
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
