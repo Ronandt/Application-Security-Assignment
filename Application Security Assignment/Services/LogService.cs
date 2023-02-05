@@ -3,9 +3,11 @@ using Application_Security_Assignment.Data.Models;
 using Application_Security_Assignment.Data.Enums;
 using Web.Utils;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Application_Security_Assignment.Services
 {
+  
     public class LogService: ILogService
     {
         private readonly AuthDbContext _authDbContext;

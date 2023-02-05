@@ -38,7 +38,7 @@ namespace Application_Security_Assignment.Services
             client.UseDefaultCredentials = false;
             // enable SSL for encryption across channels
             client.EnableSsl = true;
-            // Port 465 for SSL communication
+     
             client.Port = 587;
             // Provide authentication information with Gmail SMTP server to authenticate your sender account
             client.Credentials = new System.Net.NetworkCredential(EMAIL_SENDER, "yejiwfexfxrbtptx");

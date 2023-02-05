@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Application_Security_Assignment.Pages
 {
-    [Authorize, ServiceFilter(typeof(SecurityFilter))]
+    [Authorize(Roles = "Admin"), ServiceFilter(typeof(SecurityFilter))]
     public class LogsModel : PageModel
     {
         [BindProperty]

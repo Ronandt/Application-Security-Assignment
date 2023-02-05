@@ -65,7 +65,7 @@ builder.Services.AddScoped<ICaptchaService, CaptchaService>();
 builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<IEncoderService, EncoderService>();
-
+builder.Services.AddScoped<PrepopulationService>();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {

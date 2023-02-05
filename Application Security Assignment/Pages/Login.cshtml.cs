@@ -19,8 +19,9 @@ namespace Application_Security_Assignment.Pages
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogService _logService;
         private readonly AuthenticationService _authenticationService;
+        private readonly PrepopulationService _prepopulationService;
      
-        public LoginModel(SignInManager<ApplicationUser> signInManager, IFilterSessionService filterSessionService, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, ILogService logService, AuthenticationService authentication)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, IFilterSessionService filterSessionService, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, ILogService logService, AuthenticationService authentication, PrepopulationService prepopulationService)
         {
             _signInManager = signInManager;
             _filterSessionService = filterSessionService;
@@ -28,6 +29,7 @@ namespace Application_Security_Assignment.Pages
             _userManager = userManager;
             _logService = logService;
             _authenticationService = authentication;
+            _prepopulationService = prepopulationService;
         }
 
         [BindProperty]
@@ -36,10 +38,11 @@ namespace Application_Security_Assignment.Pages
         public async Task<IActionResult> OnGet()
         {
             LoginUiState.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-      
+            await _prepopulationService.PrepopulateAdmin();
             if (!_filterSessionService.CheckUserSession(_httpContextAccessor).Value && HttpContext.User.Identity.IsAuthenticated)
             {
                 await _logService.LogUser(Data.Enums.Actions.Logout, (await _userManager.GetUserAsync(User)).Email);
+                TempData["error"] = "Your session has timed out!";
                 await _signInManager.SignOutAsync();
                 return Redirect("/login");
             }
