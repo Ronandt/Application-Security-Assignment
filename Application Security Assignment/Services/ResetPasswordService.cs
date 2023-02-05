@@ -33,8 +33,21 @@ namespace Application_Security_Assignment.Services
         }
         public async Task<Result<bool>> ResetPassword(string email, string token, string password)
         {
+
             ApplicationUser user = await _userManager.FindByEmailAsync(email);
             string oldPassword = user.PasswordHash;
+            if(oldPassword is null)
+            {
+               var result = await _userManager.ResetPasswordAsync(user, token, password);
+                if (!result.Succeeded)
+                {
+                    return Result<bool>.Success("Password did not reset", false); ;
+                }
+                user.PasswordCreation = DateTimeOffset.Now.ToUnixTimeSeconds();
+
+                await _userManager.UpdateAsync(user);
+                return Result<bool>.Success("Password resetted!", true);
+            }
             var Presult = VerifyPasswordWithPasswordPolicy(user, password);
             if (!Presult.Value)
             {
@@ -60,6 +73,20 @@ namespace Application_Security_Assignment.Services
         public async Task<Result<bool>> ResetPassword(ApplicationUser user, string currentPassword, string newPassword)
         {
             string oldPassword = user.PasswordHash;
+            if (oldPassword is null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+    var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+               // var result = await _userManager.ChangePasswordAsync(user, null, newPassword);
+                if(!result.Succeeded)
+                {
+                    return Result<bool>.Success("Password did not reset", false); ;
+                }
+                user.PasswordCreation = DateTimeOffset.Now.ToUnixTimeSeconds();
+
+                await _userManager.UpdateAsync(user);
+                return Result<bool>.Success("Password resetted!", true);
+            }
             var Presult = VerifyPasswordWithPasswordPolicy(user, newPassword);
             if (Presult.Value)
             {
