@@ -42,7 +42,7 @@ namespace Application_Security_Assignment.Pages
             if (!_filterSessionService.CheckUserSession(_httpContextAccessor).Value && HttpContext.User.Identity.IsAuthenticated)
             {
                 await _logService.LogUser(Data.Enums.Actions.Logout, (await _userManager.GetUserAsync(User)).Email);
-                TempData["error"] = "Your session has timed out!";
+                //TempData["error"] = "Your session has timed out!";
                 await _signInManager.SignOutAsync();
                 return Redirect("/login");
             }
