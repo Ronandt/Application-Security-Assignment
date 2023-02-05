@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Options;
 using Microsoft.Build.Framework;
+using EllipticCurve.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +64,7 @@ builder.Services.AddScoped<IFilterSessionService, FilterSessionService>();
 builder.Services.AddScoped<ICaptchaService, CaptchaService>();
 builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<IEncoderService, EncoderService>();
 
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>

@@ -6,6 +6,7 @@
 @inject UserManager<ApplicationUser> userManager;
 @inject ICryptographyService cryptographyService;
 @inject IImageService imageService;
+@inject IEncoderService encoderService;
 @{
     ViewData["Title"] = "Home page";
     ApplicationUser user = await userManager.GetUserAsync(User);
@@ -52,7 +53,7 @@
                 <div class="col-lg-12 mb-4 mb-sm-5">
                     <div>
                         <span class="section-title text-primary mb-3 mb-sm-4">About Me</span>
-                       <p>@user.AboutMe</p>
+                       <p>@((await encoderService.Decode(@user.AboutMe)).Value)</p>
                     </div>
                 </div>
                 <div class="col-lg-12">

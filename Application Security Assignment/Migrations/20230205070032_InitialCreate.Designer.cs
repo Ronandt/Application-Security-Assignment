@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApplicationSecurityAssignment.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20230125092527_PasswordPolicy")]
-    partial class PasswordPolicy
+    [Migration("20230205070032_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

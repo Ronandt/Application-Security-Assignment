@@ -21,14 +21,16 @@ namespace Application_Security_Assignment.Pages
         private readonly IImageService _imageService;
         private readonly ICryptographyService _cryptographyService;
         private readonly ICaptchaService _captchaService;
+        private readonly IEncoderService _encoderService;
 
-        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IImageService imageService, ICryptographyService cryptographyService, ICaptchaService captchaService)
+        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IImageService imageService, ICryptographyService cryptographyService, ICaptchaService captchaService, IEncoderService encoderService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _imageService = imageService;
             _cryptographyService = cryptographyService;
             _captchaService = captchaService;
+            _encoderService = encoderService;
         }
 
         public void OnGet()
@@ -59,7 +61,7 @@ namespace Application_Security_Assignment.Pages
                     MobileNo = RegisterUiState.MobileNo,
                     DeliveryAddress = RegisterUiState.DeliveryAddress,
                     UserName = RegisterUiState.Email,
-                    AboutMe = RegisterUiState.AboutMe,
+                    AboutMe = (await _encoderService.Encode(RegisterUiState.AboutMe)).Value,
                     TwoFactorEnabled = true,
                     EmailConfirmed = true
                 };
