@@ -41,12 +41,6 @@ namespace Application_Security_Assignment.Pages
 
             if(ModelState.IsValid)
             {
-                
-               /* if(!(RegexConstants.PASSWORD.IsMatch(RegisterUiState.Password)))
-                {
-                    ModelState.AddModelError("RegisterUiState.Password", "Your password needs to be strong!");
-                    return Page();
-                }*/
 
                 if(!(await _captchaService.CaptchaPassed(Request.Form["token"])).Value)
                 {

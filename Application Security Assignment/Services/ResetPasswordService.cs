@@ -94,7 +94,7 @@ namespace Application_Security_Assignment.Services
             {
                 return Result<bool>.Success("Use a brand new password!", false);
             }
-            return Result<bool>.Success("Success!", true);
+            return Result<bool>.Success("Success! You will be logged out soon to ensure your password change works", true);
         }
 
         

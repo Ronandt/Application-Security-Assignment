@@ -7,7 +7,7 @@ namespace Application_Security_Assignment.Identity
        
         public override IdentityError DuplicateEmail(string email)
         {
-            var error = base.DuplicateUserName(email);
+            var error = base.DuplicateEmail(email);
             error.Description = "This email address has already been registered!";
             return error;
         }

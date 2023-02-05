@@ -10,5 +10,9 @@ namespace Application_Security_Assignment.Services
 
         public const string DISALLOW_SPECIAL_CHARACTERS_PATTERN = @"^[a-zA-Z0-9]+$";
         public static readonly Regex DISALLOW_SPECIAL_CHARACTERS_REGEX = new Regex(DISALLOW_SPECIAL_CHARACTERS_PATTERN);
+
+        public const string NUMBER_PATTERN = "^[0-9]*$";
+
+        public const string EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
     }
 }

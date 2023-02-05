@@ -12,25 +12,18 @@ namespace Application_Security_Assignment.Data.Database
     {
         public class AuthDbContext : IdentityDbContext<ApplicationUser>
         {
-            //private readonly IConfiguration _configuration;
             public DbSet<Log> Log { get; set; }
             protected override void OnModelCreating(ModelBuilder builder)
             {
                 builder.Entity<ApplicationUser>().Property(e => e.Gender).HasConversion(v => v.ToString(), v => (Gender)Enum.Parse(typeof(Gender), v));
                 base.OnModelCreating(builder);
-
-     
-
             }
 
             public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
             {
                
             }
-          /*  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            {
-                string connectionString = _configuration.GetConnectionString("AuthConnectionString"); optionsBuilder.UseSqlServer(connectionString);
-            }*/
+
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Application_Security_Assignment.UiState
         public string? FullName { get; set; }
 
         [Display(Name = "Credit Card Number")]
+        [RegularExpression(RegexConstants.NUMBER_PATTERN, ErrorMessage = @"Numbers only!")]
         [DataType(DataType.CreditCard)]
         public string? CreditCardNo { get; set; }
 
@@ -26,7 +27,7 @@ namespace Application_Security_Assignment.UiState
         }
         [Required]
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression(RegexConstants.DISALLOW_SPECIAL_CHARACTERS_PATTERN, ErrorMessage = @"Special characters not allowed")]
+        [RegularExpression(RegexConstants.NUMBER_PATTERN, ErrorMessage = @"Numbers only!")]
         public string? MobileNo { get; set; }
         [Required]
         [RegularExpression(RegexConstants.DISALLOW_SPECIAL_CHARACTERS_PATTERN, ErrorMessage = @"Special characters not allowed")]
@@ -53,6 +54,7 @@ and at least one uppercase ('A'-'Z')")]
         public string? Password { get; set; }
 
         [DataType(DataType.EmailAddress)]
+        [RegularExpression(RegexConstants.EMAIL_PATTERN, ErrorMessage = @"Write a proper email address!")]
         [Required]
         public string? Email { get; set; }
 

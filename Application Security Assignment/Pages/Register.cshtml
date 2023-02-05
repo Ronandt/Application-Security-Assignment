@@ -36,7 +36,7 @@
             <div class="col-md-7 col-lg-5 col-xl-5">
                 <form method="POST" enctype="multipart/form-data" asp-antiforgery="true">
                     <div asp-validation-summary="All" class="text-danger"></div>
-                    <input type="file" accept="image/*" class="form-control" onchange="showImgPreview(this)" asp-for="RegisterUiState.Image"/>
+                        <input type="file" accept="image/jpeg, image/jpg" class="form-control" onchange="showImgPreview(this)" asp-for="RegisterUiState.Image" />
                     <br />
                     <img id="imgPreview" class="rounded-circle" style="height:300px;width:300px;object-fit:cover" src="/uploads/user.png" />
                     <!-- username input -->
@@ -58,7 +58,7 @@
                     <!-- Gender input -->
 
                     <div class="form-outline mb-4">
-                        <label class="form-label" for="form1Example13" asp-for="RegisterUiState.CreditCardNo">Credit Card Number</label>
+                        <label class="form-label" for="form1Example13" asp-for="RegisterUiState.Gender">Gender</label>
                         <select class="form-control" asp-for="RegisterUiState.Gender">
                             <label class="form-label" for="form1Example13">Gender</label>
                             <option value="Male">Male</option>
