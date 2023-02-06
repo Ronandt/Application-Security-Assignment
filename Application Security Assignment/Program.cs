@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Options;
 using Microsoft.Build.Framework;
 using EllipticCurve.Utils;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,8 @@ builder.Services.Configure<IdentityOptions>(options => {
 
 );
 
+
+
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
     googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
@@ -86,7 +89,7 @@ builder.Services.ConfigureApplicationCookie(options => { options.LoginPath = "/l
 });
 
 builder.Services.AddDataProtection();
-builder.Services.AddTransient<IEmailSenderService, EmailSenderService>();
+builder.Services.AddTransient<IEmailSenderService, EmailSenderService>(x => new EmailSenderService(builder.Configuration.GetSection("Smtp").Get<EmailCredentials>()));
 builder.Services.AddScoped<SecurityFilter>();
 var app = builder.Build();
 

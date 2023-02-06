@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System.Configuration;
 using System.Net.Mail;
 using System.Web;
 
@@ -10,15 +11,20 @@ namespace Application_Security_Assignment.Services
 {
 	public class EmailSenderService: IEmailSenderService
 	{
+        private readonly EmailCredentials credentials;
         private const string EMAIL_SENDER = "heckguy6969@gmail.com";
+        private readonly string EMAIL_PASSWORD;
+       
 
-        public EmailSenderService(IOptions<AuthSenderOptions> optionsAccessor)
+        public EmailSenderService( EmailCredentials emailCredentials)
         {
-            AuthSenderOptions = optionsAccessor.Value;
+           
+            credentials = emailCredentials ?? new EmailCredentials();
+            EMAIL_PASSWORD = credentials.Password;
 
         }
 
-        public AuthSenderOptions AuthSenderOptions { get; } //Set with Secret Manager.
+     
 
         public async Task SendEmailAsync(string emailAddressReceiver, string subject, string message)
         {
@@ -41,7 +47,7 @@ namespace Application_Security_Assignment.Services
      
             client.Port = 587;
             // Provide authentication information with Gmail SMTP server to authenticate your sender account
-            client.Credentials = new System.Net.NetworkCredential(EMAIL_SENDER, "yejiwfexfxrbtptx");
+            client.Credentials = new System.Net.NetworkCredential(EMAIL_SENDER, EMAIL_PASSWORD);
 
             await client.SendMailAsync(newMail); // Send the constructed mail
             Console.WriteLine("Email Sent");
