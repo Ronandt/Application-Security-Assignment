@@ -71,6 +71,7 @@ namespace Application_Security_Assignment.Pages
                 if(result.Succeeded)
                 {
                     await _imageService.StoreImage(RegisterUiState?.Image, newUser);
+                    TempData["success"] = "Registered!";
                     return Redirect("/login");
                 } else
                 {

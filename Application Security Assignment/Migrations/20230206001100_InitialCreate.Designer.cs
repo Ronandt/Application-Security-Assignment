@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApplicationSecurityAssignment.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20230205070032_InitialCreate")]
+    [Migration("20230206001100_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

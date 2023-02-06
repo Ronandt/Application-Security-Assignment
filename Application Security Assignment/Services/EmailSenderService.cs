@@ -14,6 +14,7 @@ namespace Application_Security_Assignment.Services
         private readonly EmailCredentials credentials;
         private const string EMAIL_SENDER = "heckguy6969@gmail.com";
         private readonly string EMAIL_PASSWORD;
+    
        
 
         public EmailSenderService( EmailCredentials emailCredentials)
@@ -33,7 +34,7 @@ namespace Application_Security_Assignment.Services
             SmtpClient client = new SmtpClient("smtp.gmail.com");
 
             // Follow the RFS 5321 Email Standard
-            newMail.From = new MailAddress(EMAIL_SENDER, "heckguy6969@gmail.com");
+            newMail.From = new MailAddress(EMAIL_SENDER, EMAIL_SENDER);
 
             newMail.To.Add(emailAddressReceiver);// declare the email subject
 
