@@ -89,7 +89,12 @@ builder.Services.ConfigureApplicationCookie(options => { options.LoginPath = "/l
 });
 
 builder.Services.AddDataProtection();
-builder.Services.AddTransient<IEmailSenderService, EmailSenderService>(x => new EmailSenderService(builder.Configuration.GetSection("Smtp").Get<EmailCredentials>()));
+
+builder.Services.AddTransient<IEmailSenderService, EmailSenderService>(x =>
+new EmailSenderService(
+    builder.Configuration.GetSection("Smtp")
+    .Get<EmailCredentials>()));
+
 builder.Services.AddScoped<SecurityFilter>();
 var app = builder.Build();
 
